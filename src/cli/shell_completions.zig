@@ -16,9 +16,9 @@ pub const Shell = enum {
     zsh,
     fish,
 
-    const bash_completions = @embedFile("../../completions/bun.bash");
-    const zsh_completions = @embedFile("../../completions/bun.zsh");
-    const fish_completions = @embedFile("../../completions/bun.fish");
+    const bash_completions = ("../../completions/bun.bash");
+    const zsh_completions = ("../../completions/bun.zsh");
+    const fish_completions = ("../../completions/bun.fish");
 
     pub fn completions(this: Shell) []const u8 {
         return switch (this) {

@@ -140,12 +140,12 @@ pub const C_Generator = struct {
             self.writeType(comptime return_type);
             self.write("_buf ret_value");
 
-            if (comptime meta.args.len > 0) {
+            if (comptime meta.params.len > 0) {
                 self.write(", ");
             }
         }
 
-        inline for (meta.args) |arg, i| {
+        inline for (meta.params) |arg, i| {
             const ArgType = comptime arg.type.?;
 
             switch (@typeInfo(ArgType)) {
@@ -172,7 +172,7 @@ pub const C_Generator = struct {
             // } else {
 
             //TODO: Figure out how to get arg names; for now just do arg0..argN
-            if (i != meta.args.len - 1)
+            if (i != meta.params.len - 1)
                 self.write(", ");
         }
 
@@ -196,7 +196,7 @@ pub const C_Generator = struct {
         const func: std.builtin.Type.Fn = @typeInfo(Function).Fn;
         self.writeType(func.return_type orelse void);
         self.write(" (*" ++ name ++ ")(");
-        inline for (func.args) |arg, i| {
+        inline for (func.params) |arg, i| {
             self.writeType(arg.type.?);
             // if (comptime func.arg_names.len > 0 and func.arg_names.len > i) {
             //     self.write(comptime arg_names[i]);
@@ -210,7 +210,7 @@ pub const C_Generator = struct {
             // }
 
             //TODO: Figure out how to get arg names; for now just do arg0..argN
-            if (i != func.args.len - 1)
+            if (i != func.params.len - 1)
                 self.write(", ");
         }
 

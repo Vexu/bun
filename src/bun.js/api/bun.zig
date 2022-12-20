@@ -664,6 +664,7 @@ pub fn readFileAsBytesCallback(
         .Uint8Array,
     );
 
+    if (true) @panic("todo??");
     return marked_array_buffer.toJSObjectRef(ctx, exception);
 }
 

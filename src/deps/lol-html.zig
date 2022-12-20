@@ -75,7 +75,7 @@ pub const HTMLRewriter = opaque {
 
         extern fn lol_html_rewriter_builder_add_document_content_handlers(
             builder: *HTMLRewriter.Builder,
-            doctype_handler: ?DirectiveFunctionType(DocType),
+            doctype_handler: ?*const DirectiveFunctionType(DocType),
             doctype_handler_user_data: ?*anyopaque,
             comment_handler: ?lol_html_comment_handler_t,
             comment_handler_user_data: ?*anyopaque,
@@ -700,15 +700,15 @@ pub const DocEnd = opaque {
 };
 
 fn DirectiveFunctionType(comptime Container: type) type {
-    return *const fn (*Container, ?*anyopaque) callconv(.C) Directive;
+    return fn (*Container, ?*anyopaque) callconv(.C) Directive;
 }
 
 fn DirectiveFunctionTypeForHandler(comptime Container: type, comptime UserDataType: type) type {
-    return *const fn (*UserDataType, *Container) bool;
+    return fn (*UserDataType, *Container) bool;
 }
 
 fn DocTypeHandlerCallback(comptime UserDataType: type) type {
-    return *const fn (*DocType, *UserDataType) bool;
+    return fn (*DocType, *UserDataType) bool;
 }
 
 pub fn DirectiveHandler(comptime Container: type, comptime UserDataType: type, comptime Callback: (fn (this: *UserDataType, container: *Container) bool)) DirectiveFunctionType(Container) {

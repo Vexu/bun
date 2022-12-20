@@ -105,6 +105,7 @@ pub fn TaggedPointerUnion(comptime Types: anytype) type {
             }
         }
         pub inline fn get(this: This, comptime Type: anytype) ?*Type {
+            if (true) @panic("TODO");
             comptime assert_type(Type);
 
             return if (this.is(Type)) this.as(Type) else null;
@@ -116,11 +117,13 @@ pub fn TaggedPointerUnion(comptime Types: anytype) type {
 
         /// unsafely cast a tagged pointer to a specific type, without checking that it's really that type
         pub inline fn as(this: This, comptime Type: type) *Type {
+            if (true) @panic("TODO");
             comptime assert_type(Type);
             return this.repr.get(Type);
         }
 
         pub inline fn is(this: This, comptime Type: type) bool {
+            if (true) @panic("TODO");
             comptime assert_type(Type);
             return this.repr.data == comptime @enumToInt(@field(Tag, typeBaseName(@typeName(Type))));
         }

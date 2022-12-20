@@ -1899,7 +1899,7 @@ pub const Blob = struct {
                     }
                 }
 
-                const WrappedOpenCallback = *const fn (*State, *HTTPClient.NetworkThread.Completion, AsyncIO.OpenError!bun.FileDescriptor) void;
+                const WrappedOpenCallback = fn (*State, *HTTPClient.NetworkThread.Completion, AsyncIO.OpenError!bun.FileDescriptor) void;
                 fn OpenCallbackWrapper(comptime Callback: OpenCallback) WrappedOpenCallback {
                     return struct {
                         const callback = Callback;

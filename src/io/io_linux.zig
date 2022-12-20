@@ -786,7 +786,7 @@ pub const Completion = struct {
     fn complete(completion: *Completion) void {
         switch (completion.operation) {
             .accept => {
-                const result = if (completion.result < 0) switch (-completion.result) {
+                const result: anyerror!os.socket_t = if (completion.result < 0) switch (-completion.result) {
                     os.EINTR => {
                         completion.io.enqueue(completion);
                         return;
@@ -809,7 +809,7 @@ pub const Completion = struct {
             },
 
             .close => {
-                const result = if (completion.result < 0) switch (-completion.result) {
+                const result: anyerror!void = if (completion.result < 0) switch (-completion.result) {
                     os.EINTR => {}, // A success, see https://github.com/ziglang/zig/issues/2425
                     os.EBADF => error.FileDescriptorInvalid,
                     os.EDQUOT => error.DiskQuota,
@@ -820,7 +820,7 @@ pub const Completion = struct {
                 completion.callback(completion.context, completion, &result);
             },
             .open => {
-                const result = if (completion.result < 0) switch (-completion.result) {
+                const result: anyerror!os.socket_t = if (completion.result < 0) switch (-completion.result) {
                     0 => unreachable,
                     os.EAGAIN, os.EINPROGRESS, os.EINTR => {
                         completion.io.enqueue(completion);
@@ -847,7 +847,7 @@ pub const Completion = struct {
                 completion.callback(completion.context, completion, &result);
             },
             .connect => {
-                const result = if (completion.result < 0) switch (-completion.result) {
+                const result: anyerror!void = if (completion.result < 0) switch (-completion.result) {
                     os.EAGAIN, os.EINPROGRESS, os.EINTR => {
                         completion.io.enqueue(completion);
                         return;
@@ -872,7 +872,7 @@ pub const Completion = struct {
                 completion.callback(completion.context, completion, &result);
             },
             .fsync => {
-                const result = if (completion.result < 0) switch (-completion.result) {
+                const result: anyerror!void = if (completion.result < 0) switch (-completion.result) {
                     os.EINTR => {
                         completion.io.enqueue(completion);
                         return;
@@ -888,7 +888,7 @@ pub const Completion = struct {
                 completion.callback(completion.context, completion, &result);
             },
             .read => {
-                const result = if (completion.result < 0) switch (-completion.result) {
+                const result: anyerror!usize = if (completion.result < 0) switch (-completion.result) {
                     os.EAGAIN, os.EINTR => {
                         completion.io.enqueue(completion);
                         return;
@@ -908,7 +908,7 @@ pub const Completion = struct {
                 completion.callback(completion.context, completion, &result);
             },
             .readev, .recv => {
-                const result = if (completion.result < 0) switch (-completion.result) {
+                const result: anyerror!usize = if (completion.result < 0) switch (-completion.result) {
                     os.EAGAIN, os.EINTR => {
                         completion.io.enqueue(completion);
                         return;
@@ -924,7 +924,7 @@ pub const Completion = struct {
                 completion.callback(completion.context, completion, &result);
             },
             .writev, .send => {
-                const result = if (completion.result < 0) switch (-completion.result) {
+                const result: anyerror!usize = if (completion.result < 0) switch (-completion.result) {
                     os.EAGAIN, os.EINTR => {
                         completion.io.enqueue(completion);
                         return;
@@ -946,7 +946,7 @@ pub const Completion = struct {
                 completion.callback(completion.context, completion, &result);
             },
             .timeout => {
-                const result = if (completion.result < 0) switch (-completion.result) {
+                const result: anyerror!void = if (completion.result < 0) switch (-completion.result) {
                     os.EINTR => {
                         completion.io.enqueue(completion);
                         return;
@@ -958,7 +958,7 @@ pub const Completion = struct {
                 completion.callback(completion.context, completion, &result);
             },
             .write => {
-                const result = if (completion.result < 0) switch (-completion.result) {
+                const result: anyerror!usize = if (completion.result < 0) switch (-completion.result) {
                     os.EINTR => {
                         completion.io.enqueue(completion);
                         return;
