@@ -386,8 +386,7 @@ pub const Linker = struct {
                         }
                     }
 
-                    if (true) @panic("TODO");
-                    var resolved_import_ = brk: {
+                    var resolved_import_: anyerror!Resolver.Result = brk: {
                         switch (import_record.tag) {
                             else => {},
                             // for fast refresh, attempt to read the version directly from the bundle instead of resolving it
@@ -425,12 +424,13 @@ pub const Linker = struct {
                         }
 
                         if (comptime is_bun) {
-                            switch (linker.resolver.resolveAndAutoInstall(
+                            var tmp = linker.resolver.resolveAndAutoInstall(
                                 source_dir,
                                 import_record.path.text,
                                 import_record.kind,
                                 linker.options.global_cache,
-                            )) {
+                            );
+                            switch (tmp) {
                                 .success => |_resolved_import| {
                                     switch (import_record.tag) {
                                         else => {},
