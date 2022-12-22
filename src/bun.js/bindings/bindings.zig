@@ -3662,7 +3662,7 @@ const private = struct {
 
 pub fn NewFunctionPtr(globalObject: *JSGlobalObject, symbolName: ?*const ZigString, argCount: u32, comptime functionPointer: anytype, strong: bool) *anyopaque {
     JSC.markBinding(@src());
-    return private.Bun__CreateFFIFunction(globalObject, symbolName, argCount, @ptrCast(*const anyopaque, bun.fnptr(functionPointer)), strong);
+    return private.Bun__CreateFFIFunction(globalObject, symbolName, argCount, @ptrCast(*const anyopaque, functionPointer), strong);
 }
 
 pub fn NewFunction(
@@ -3672,7 +3672,7 @@ pub fn NewFunction(
     comptime functionPointer: anytype,
     strong: bool,
 ) JSValue {
-    return NewRuntimeFunction(globalObject, symbolName, argCount, bun.fnptr(functionPointer), strong);
+    return NewRuntimeFunction(globalObject, symbolName, argCount, &functionPointer, strong);
 }
 
 pub fn NewRuntimeFunction(
@@ -3709,7 +3709,7 @@ pub fn NewFunctionWithData(
         globalObject,
         symbolName,
         argCount,
-        @ptrCast(*const anyopaque, bun.fnptr(functionPointer)),
+        @ptrCast(*const anyopaque, &functionPointer),
         strong,
         data,
     );

@@ -1938,7 +1938,7 @@ pub const RefString = struct {
     allocator: std.mem.Allocator,
 
     ctx: ?*anyopaque = null,
-    onBeforeDeinit: bun.FnPtrOptional(Callback) = null,
+    onBeforeDeinit: Callback = null,
 
     pub const Hash = u32;
     pub const Map = std.HashMap(Hash, *JSC.RefString, IdentityContext(Hash), 80);
@@ -1947,7 +1947,7 @@ pub const RefString = struct {
         return JSC.ZigString.init(this.slice()).external(global, this, RefString__external);
     }
 
-    pub const Callback = fn (ctx: *anyopaque, str: *RefString) void;
+    pub const Callback = ?*const fn (ctx: *anyopaque, str: *RefString) void;
 
     pub fn computeHash(input: []const u8) u32 {
         return @truncate(u32, std.hash.Wyhash.hash(0, input));
